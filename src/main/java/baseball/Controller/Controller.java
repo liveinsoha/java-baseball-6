@@ -4,6 +4,7 @@ import baseball.Service.GameService;
 import baseball.domain.Computer;
 import baseball.domain.Input;
 import baseball.domain.Result;
+import baseball.dto.ResultDTO;
 import baseball.util.Parser;
 import baseball.util.RandomAnswerGenerator;
 import baseball.view.InputView;
@@ -19,15 +20,7 @@ public class Controller {
     }
 
     public void run() {
-        printGameStartMessage();
-        try {
-            startNewGame();
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    private void startNewGame() {
+        InputView.printGameStartMessage();
         do {
             gameService.setNewGame();
             playGame();
@@ -36,18 +29,36 @@ public class Controller {
 
 
     private void playGame() {
-        while (!gameService.isGameOver()) {
-            Input input = Input.of(InputView.getUserInput());
-            Result result = gameService.playRound(input);
-            OutputView.printResultOfRound(result.toDto());
-        }
+        do {
+            ResultDTO resultDTO = gameService.playRound(getInput());
+            OutputView.printResultOfRound(resultDTO);
+        } while (!gameService.isGameOver());
         OutputView.printCongratulation();
+        OutputView.printTrialCount(gameService.getRoundCount());
+        OutputView.printResultOfGame(gameService.getResultDTOs());
+    }
+
+    private Input getInput() {
+        try {
+            return Input.of(InputView.getUserInput());
+        } catch (IllegalArgumentException e) {
+            OutputView.printErrorMessage(e.getMessage());
+            return getInput();
+        }
     }
 
     private boolean restartGame() {
+        try {
+            return getRestartInput() == 1;
+        } catch (IllegalArgumentException e) {
+            OutputView.printErrorMessage(e.getMessage());
+            return restartGame();
+        }
+    }
+
+    private int getRestartInput() {
         String restartInput = InputView.getRestartInput();
-        int restartNumber = validateRestartInput(restartInput);
-        return restartNumber == 1;
+        return validateRestartInput(restartInput);
     }
 
     private int validateRestartInput(String restartInput) {
@@ -58,7 +69,4 @@ public class Controller {
         return restartNumber;
     }
 
-    private void printGameStartMessage() {
-        InputView.printGameStartMessage();
-    }
 }
