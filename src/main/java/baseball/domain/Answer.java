@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public class Answer {
 
-    List<Integer> answer;
+    private final List<Integer> answer;
 
     private Answer(List<Integer> numbers) {
         validate(numbers);
@@ -35,7 +35,7 @@ public class Answer {
     }
 
     public int getCountOfContain(Input input) {
-        return (int) input.getInput().stream().filter(number -> answer.contains(number)).count();
+        return (int) input.getInput().stream().filter(answer::contains).count();
     }
 
     public int getCountOfCorrectPosition(Input input) {

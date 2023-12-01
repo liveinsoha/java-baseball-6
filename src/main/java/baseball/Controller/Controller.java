@@ -1,15 +1,22 @@
 package baseball.Controller;
 
 import baseball.Service.GameService;
+import baseball.domain.Computer;
 import baseball.domain.Input;
 import baseball.domain.Result;
 import baseball.util.Parser;
+import baseball.util.RandomAnswerGenerator;
 import baseball.view.InputView;
 import baseball.view.OutputView;
 
 public class Controller {
 
-    GameService gameService = new GameService();
+    GameService gameService;
+
+    public Controller() {
+        Computer computer = new Computer(new RandomAnswerGenerator());
+        this.gameService = new GameService(computer);
+    }
 
     public void run() {
         printGameStartMessage();
@@ -22,18 +29,33 @@ public class Controller {
 
     private void startNewGame() {
         do {
-            gameService.startGame();
+            gameService.setNewGame();
             playGame();
-        } while (Parser.ParseRestartInput(InputView.getRestartInput()) == 1);
+        } while (restartGame());
     }
 
+
     private void playGame() {
-        Result result;
-        do {
-            result = gameService.playRound();
+        while (!gameService.isGameOver()) {
+            Input input = Input.of(InputView.getUserInput());
+            Result result = gameService.playRound(input);
             OutputView.printResultOfRound(result.toDto());
-        } while (!gameService.isGameOver(result));
+        }
         OutputView.printCongratulation();
+    }
+
+    private boolean restartGame() {
+        String restartInput = InputView.getRestartInput();
+        int restartNumber = validateRestartInput(restartInput);
+        return restartNumber == 1;
+    }
+
+    private int validateRestartInput(String restartInput) {
+        int restartNumber = Parser.parseRestartInput(restartInput);
+        if (restartNumber != 1 && restartNumber != 2) {
+            throw new IllegalArgumentException("[ERROR] 잘못된 입력입니다");
+        }
+        return restartNumber;
     }
 
     private void printGameStartMessage() {

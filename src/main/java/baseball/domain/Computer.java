@@ -1,29 +1,19 @@
 package baseball.domain;
 
-import baseball.util.NumberGenerator;
-import baseball.util.RandomGenerator;
+import baseball.util.AnswerGenerator;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class Computer {
 
-    private final NumberGenerator numberGenerator;
+    private final AnswerGenerator answerGenerator;
     private Answer answer;
 
-    public Computer(NumberGenerator generator) {
-        this.numberGenerator = generator;
+    public Computer(AnswerGenerator generator) {
+        this.answerGenerator = generator;
     }
 
     public void generateAnswer() {
-        List<Integer> numbers = new ArrayList<>();
-        while (numbers.size() < 3) {
-            int number = numberGenerator.generate();
-            if (!numbers.contains(number)) {
-                numbers.add(number);
-            }
-        }
-        answer = Answer.of(numbers);
+        answer = Answer.of(answerGenerator.generateAnswer());
     }
 
 

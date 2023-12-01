@@ -18,7 +18,7 @@ public class Parser {
         return inputs;
     }
 
-    public static int ParseRestartInput(String restartInput) {
+    public static int parseRestartInput(String restartInput) {
         try {
             return Integer.parseInt(restartInput);
         } catch (NumberFormatException e) {
