@@ -1,5 +1,6 @@
 package baseball.domain;
 
+
 import java.util.List;
 import java.util.Objects;
 
@@ -8,7 +9,7 @@ public class Answer {
     List<Integer> answer;
 
     private Answer(List<Integer> numbers) {
-        validateRange(numbers);
+        validate(numbers);
         answer = numbers;
     }
 
@@ -16,9 +17,20 @@ public class Answer {
         return new Answer(numbers);
     }
 
+    private void validate(List<Integer> numbers) {
+        validateRange(numbers);
+        validateDuplicate(numbers);
+    }
+
     private void validateRange(List<Integer> numbers) {
         if (numbers.stream().anyMatch(number -> number < 1 || number > 9)) {
             throw new IllegalArgumentException();
+        }
+    }
+
+    private void validateDuplicate(List<Integer> numbers) {
+        if (numbers.stream().distinct().count() != 3) {
+            throw new IllegalArgumentException("[ERROR] 잘못된 입력입니다");
         }
     }
 

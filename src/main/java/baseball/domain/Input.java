@@ -22,6 +22,13 @@ public class Input {
         validateUserInputLength(userInput);
         validateUserInputNumber(userInput);
         validateNumberRange(userInput);
+        validateDuplicate(userInput);
+    }
+
+    private void validateDuplicate(String userInput) {
+        if (Parser.parseStringToIntegers(userInput).stream().distinct().count() != 3) {
+            throw new IllegalArgumentException("[ERROR] 잘못된 입력입니다");
+        }
     }
 
     private void validateUserInputLength(String userInput) {
