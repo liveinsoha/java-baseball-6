@@ -5,16 +5,24 @@ import java.util.List;
 
 public class Parser {
 
-    static public int parseCharToInt(char c) {
+    public static int parseCharToInt(char c) {
         return c - '0';
     }
 
-    static public List<Integer> parseStringToIntegers(String input) {
+    public static List<Integer> parseStringToIntegers(String input) {
         List<Integer> inputs = new ArrayList<>();
         char[] numbers = input.toCharArray();
         for (int i = 0; i < 3; i++) {
             inputs.add(parseCharToInt(numbers[i]));
         }
         return inputs;
+    }
+
+    public static int ParseRestartInput(String restartInput) {
+        try {
+            return Integer.parseInt(restartInput);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("[ERROR] 잘못된 입력입니다");
+        }
     }
 }
