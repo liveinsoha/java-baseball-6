@@ -9,8 +9,6 @@ class ComputerTest {
 
     @Test
     void test() {
-        Computer computer = new Computer(() -> 1) {
 
-        }
     }
 }

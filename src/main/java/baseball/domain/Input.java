@@ -14,7 +14,7 @@ public class Input {
         input = Parser.parseStringToIntegers(userInput);
     }
 
-    static Input of(String userInput) {
+    public static Input of(String userInput) {
         return new Input(userInput);
     }
 
